@@ -76,9 +76,10 @@ contract ERC20Template is ERC20 {
 
 | Tool                                                              | Purpose                                          |
 | ----------------------------------------------------------------- | ------------------------------------------------ |
-| [Foundry](https://getfoundry.sh/)                            | Build, test, and deploy Solidity smart contracts |
+| [Foundry](https://getfoundry.sh/)                                 | Build, test, and deploy Solidity smart contracts |
 | [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts) | Secure token implementations                     |
-| [cast](https://getfoundry.sh/cast/reference/overview)       | CLI for on-chain interaction                     |
+| [forge](https://getfoundry.sh/forge/overview)                     | Tests, builds, and deploys your smart contracts  | 
+| [cast](https://getfoundry.sh/cast/reference/overview)             | CLI for on-chain interaction                     |
 | [Ethereum Sepolia](https://sepolia.etherscan.io/)                 | Public Ethereum testnet                          |
 
 ---
@@ -89,12 +90,6 @@ contract ERC20Template is ERC20 {
 
 ```bash
 cast wallet list
-```
-
-### Run Tests
-
-```bash
-forge test -vvvv
 ```
 
 ### Generate Remappings
