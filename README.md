@@ -1,66 +1,142 @@
-## Foundry
+# ERC20 Token Template (Foundry + OpenZeppelin)
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This repository contains a clean, minimal scaffold for deploying ERC20 tokens using Foundry and OpenZeppelin. It is designed to be flexible and production-ready, providing a solid starting point for future coin/token projects.
 
-Foundry consists of:
+---
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## What This Repo Does
 
-## Documentation
+* Deploys an ERC20-compliant token smart contract
+* Allows the contract owner to mint tokens to any wallet
+* Minimal and extendable template for creating new token projects quickly
 
-https://book.getfoundry.sh/
+---
 
-## Usage
+## How to Use It
 
-### Build
+### 1. Clone the Repo
 
-```shell
-$ forge build
+```bash
+git clone https://github.com/your-username/ERC20-Template.git
+cd ERC20-Template
 ```
 
-### Test
+### 2. Install Dependencies
 
-```shell
-$ forge test
+```bash
+forge install
 ```
 
-### Format
+### 3. Build the Project
 
-```shell
-$ forge fmt
+```bash
+forge build
 ```
 
-### Gas Snapshots
+### 4. Recommended: Use `cast wallet` Instead of `.env`
 
-```shell
-$ forge snapshot
+```bash
+cast wallet import defaultKey --interactive
 ```
 
-### Anvil
+This will securely store your private key encrypted.
 
-```shell
-$ anvil
+### 5. Deploy to Sepolia
+
+```bash
+forge script script/ERC20Template.s.sol:DeployERC20Template \
+  --rpc-url https://ethereum-sepolia-rpc.publicnode.com \
+  --sender 0xYourAddress \
+  --broadcast -vvvv
 ```
 
-### Deploy
+---
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+## How It Works
+
+### `src/ERC20Template.sol`
+
+```solidity
+contract ERC20Template is ERC20, ERC20Burnable, Ownable {
+    constructor() ERC20("Token Name", "TokenSymbol") {}
+
+    function mint(address to, uint256 amount) public onlyOwner {
+        _mint(to, amount);
+    }
+}
 ```
 
-### Cast
+* Inherits from OpenZeppelin's secure ERC20 implementation
+* `mint()` is only accessible to the contract owner
+* Tokens can be minted to any wallet at any time
 
-```shell
-$ cast <subcommand>
+---
+
+## Tech Stack
+
+| Tool                                                              | Purpose                                          |
+| ----------------------------------------------------------------- | ------------------------------------------------ |
+| [Foundry](https://getfoundry.sh/)                            | Build, test, and deploy Solidity smart contracts |
+| [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts) | Secure token implementations                     |
+| [cast](https://getfoundry.sh/cast/reference/overview)       | CLI for on-chain interaction                     |
+| [Ethereum Sepolia](https://sepolia.etherscan.io/)                 | Public Ethereum testnet                          |
+
+---
+
+## Useful Commands
+
+### Manage Wallets
+
+```bash
+cast wallet list
 ```
 
-### Help
+### Mint Tokens to an Address
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+```bash
+cast send 0xYourContractAddress "mint(address,uint256)" 0xRecipientAddress 150e18 \
+  --account defaultKey \
+  --rpc-url https://ethereum-sepolia-rpc.publicnode.com
 ```
+
+### Run Tests
+
+```bash
+forge test -vvvv
+```
+
+### Generate Remappings
+
+```bash
+forge remappings > remappings.txt
+```
+
+---
+
+## Project Structure
+
+```
+ERC20-Template/
+├── lib/                    # External libraries (OpenZeppelin, forge-std)
+├── src/                   # Main contract file
+├── script/                # Deployment script
+├── test/                  # Unit tests (optional)
+├── foundry.toml           # Foundry configuration
+├── remappings.txt         # Path aliases for imports
+├── .gitignore             # Git exclusions
+└── README.md
+```
+
+---
+
+## ⚠️ Security & Deployment Notes
+
+* Avoid committing private keys to `.env` or source control.
+* Use `cast wallet` to securely encrypt and store keys.
+* This project is optimized for testnet usage. Add more access controls and safety mechanisms before deploying to mainnet.
+
+---
+
+## Author
+
+Created by [Sawyer Sieja](https://github.com/sawyersieja). Fork or reuse as needed!
