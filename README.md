@@ -1,13 +1,14 @@
 # ERC20 Token Template (Foundry + OpenZeppelin)
 
-This repository contains a clean, minimal scaffold for deploying ERC20 tokens using Foundry and OpenZeppelin. It is designed to be flexible and production-ready, providing a solid starting point for future coin/token projects.
+This repository contains a clean, minimal scaffold for deploying ERC20 tokens using Foundry and OpenZeppelin. It is designed to be flexible and production-ready, providing a solid starting point for future coin/token projects. This is a barebones ERC20 implementation that I encourage other developers to expand on and customize for their preferences. The goal of this repo is to reduce the amount of time required to begin the process of creating an ERC20 for my future projects, as well as anyone else that wants to clone this repo.
 
 ---
 
 ## What This Repo Does
 
 * Deploys an ERC20-compliant token smart contract
-* Allows the contract owner to mint tokens to any wallet
+* Allows the contract creator to mint a fixed supply of a token
+* Upon contract creation, newly minted tokens are sent to the creator's address
 * Minimal and extendable template for creating new token projects quickly
 
 ---
@@ -46,6 +47,7 @@ This will securely store your private key encrypted.
 ```bash
 forge script script/ERC20Template.s.sol:DeployERC20Template \
   --rpc-url https://ethereum-sepolia-rpc.publicnode.com \
+  --account defaultKey
   --sender 0xYourAddress \
   --broadcast -vvvv
 ```
@@ -57,18 +59,16 @@ forge script script/ERC20Template.s.sol:DeployERC20Template \
 ### `src/ERC20Template.sol`
 
 ```solidity
-contract ERC20Template is ERC20, ERC20Burnable, Ownable {
-    constructor() ERC20("Token Name", "TokenSymbol") {}
-
-    function mint(address to, uint256 amount) public onlyOwner {
-        _mint(to, amount);
+contract ERC20Template is ERC20 {
+    constructor() ERC20("Coin Name", "Coin Abbreviation") {
+        _mint(msg.sender, 150 ether);
     }
 }
 ```
 
 * Inherits from OpenZeppelin's secure ERC20 implementation
-* `mint()` is only accessible to the contract owner
-* Tokens can be minted to any wallet at any time
+* `_mint()` is only called at the time of contract creation, creating a fixed token supply
+* The minted tokens will be sent to your wallet address
 
 ---
 
@@ -89,14 +89,6 @@ contract ERC20Template is ERC20, ERC20Burnable, Ownable {
 
 ```bash
 cast wallet list
-```
-
-### Mint Tokens to an Address
-
-```bash
-cast send 0xYourContractAddress "mint(address,uint256)" 0xRecipientAddress 150e18 \
-  --account defaultKey \
-  --rpc-url https://ethereum-sepolia-rpc.publicnode.com
 ```
 
 ### Run Tests
