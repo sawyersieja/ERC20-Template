@@ -1,11 +1,11 @@
 // ERC20Template.s.sol
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import {Script, console} from "forge-std/Script.sol";
 import {ERC20Template} from "../src/ERC20Template.sol";
 
-contract ERC20TemplateScript is Script {
+contract DeployERC20Template is Script {
     ERC20Template public token;
 
     function setUp() public {}

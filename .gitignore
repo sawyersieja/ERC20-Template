@@ -5,9 +5,6 @@ lib/
 
 
 # Ignores development broadcast logs
-!/broadcast
-/broadcast/*/31337/
-/broadcast/**/dry-run/
 broadcast/
 
 # Docs
@@ -16,7 +13,9 @@ docs/
 # Dotenv file
 .env
 
+# Remappings
 remappings.txt
 
+# OS/editor clutter
 .DS_Store
 *.swp
